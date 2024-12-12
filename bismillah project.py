@@ -1,35 +1,50 @@
-stok_barang = []
+import streamlit as st
 
-def tambah_barang():
-    print('-'*40)
-    print(" TAMBAH BARANG ".center(40, '='))
-    print('-'*40)
-    print("Kode Barang | Nama Barang    | Harga Modal | Stok Barang | Satuan")
-    print("---------------------------------------------------------------")
-    print("BS          | Beras          | 100.000     | 20          | Karung ")
+# Using object notation
+menu = st.sidebar.selectbox(
+    "PILIH MENU KASIR PINTAR",
+    ("modal_stok", "jumlah_penjualan", "pendapatan", "rekap_penjualan")
+)
 
-    while True:
-        # Input data barang
-        kode_brg = input("Masukkan kode barang: ").strip().upper()
-        nama_brg = input("Masukkan nama barang: ").strip()
-        harga_modal = float(input("Masukkan harga modal: ").strip())
-        stok = int(input("Masukkan stok barang: ").strip())
-        satuan = input("Masukkan satuan barang: ").strip()
-        barang = {
-            "Kode Barang": kode_brg,
-            "Nama Barang": nama_brg,
-            "Harga Modal": harga_modal,
-            "Stok Barang": stok,
-            "Satuan": satuan
-        }
-        stok_barang.append(barang)
-        # Tampilkan daftar barang
-        print("\nLIST BARANG")
-        print("Kode Barang | Nama Barang    | Harga Modal | Stok Barang | Satuan")
-        print("---------------------------------------------------------------")
-        
-        # Iterasi melalui setiap barang di stok_barang
-        for barang in stok_barang:
-            print(barang["Kode Barang"], "|", barang["Nama Barang"], "|", barang["Harga Modal"], "|", barang["Stok Barang"], "|", barang["Satuan"])
-# Jalankan fungsi tambah_barang
-tambah_barang()
+# Fungsi untuk menampilkan modal stok barang
+def modal_stok():
+    st.subheader("Modal Stok Barang")
+    st.write("Detail stok barang yang tersedia...")
+    # Tambahkan input atau visualisasi stok barang di sini
+
+# Fungsi untuk menampilkan detail pendapatan
+def pendapatan():
+    st.subheader("Rincian Pendapatan")
+    
+
+
+# Fungsi lain berdasarkan pilihan menu
+def jumlah_penjualan():
+    st.write("## Menu Sembako:")
+    st.write("1. Beras (1L) - Rp 12.000")
+    st.write("2. Gula pasir (1kg) - Rp 15.000")
+    st.write("3. Minyak Goreng (1L) - Rp 20.000")
+    st.write("4. Telur (per butir) - Rp 2.000")
+    st.write("5. Garam (per 250 gram) - Rp 5.000")
+    st.subheader("Input Barang Pembeli")
+    jumlah = st.number_input("Masukkan jumlah penjualan:", min_value=0, step=1)
+    if st.button("Simpan"):
+        st.session_state['jumlah'] = jumlah
+
+def rekap_penjualan():
+    st.subheader("Rekap Penjualan")
+    if 'jumlah' in st.session_state:
+        jumlah = st.session_state['jumlah']
+        st.write(f"Jumlah penjualan saat ini: {jumlah}")
+    else:
+        st.write("Tidak ada data jumlah penjualan yang disimpan.")
+
+
+if menu == "modal_stok":
+    modal_stok()
+elif menu == "jumlah_penjualan":
+    jumlah_penjualan()
+elif menu == "pendapatan":
+    pendapatan()
+elif menu == "rekap_penjualan":
+    rekap_penjualan()
