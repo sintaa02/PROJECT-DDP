@@ -1,6 +1,6 @@
 import streamlit as st
 import base64
-import io
+import os
 
 # Fungsi untuk menambahkan gambar latar belakang
 def add_bg_from_local(image_file):
