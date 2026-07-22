@@ -2,53 +2,57 @@ import streamlit as st
 import base64
 import os
 
-# Fungsi untuk menambahkan gambar latar belakang
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image:
-        # Encode gambar sebagai base64
-        encoded_image = base64.b64encode(image.read()).decode()  # Gunakan base64.b64encode
-    # Sisipkan CSS untuk gambar latar belakang
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpg;base64,{encoded_image}");
-            background-size: cover;
-            background-position: center;
-            background-color: black;  /* Warna latar belakang */
-            background-repeat: no-repeat;
-        }}
-
-        [data-testid="stHeader"] {{
-            background-color: #E8CAA8;
-        }}
-    
-        [data-testid="stSidebar"] * {{
-            background-color: #E8CAA8;
-            color: black !important;
-            font-size: 20px;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True  # Izinkan HTML kustom
-    )
-
-# Atur halaman
+# 1. Atur halaman (Wajib paling atas sebelum elemen UI lainnya)
 st.set_page_config(
     page_title="KASIR PINTAR",
     layout="wide",
     page_icon="🛍️"
 )
 
+# 2. Fungsi menambahkan background (dilengkapi penanganan error biar gak crash)
+def add_bg_from_local(image_file):
+    if os.path.exists(image_file):
+        with open(image_file, "rb") as image:
+            encoded_image = base64.b64encode(image.read()).decode()
+        
+        st.markdown(
+            f"""
+            <style>
+            .stApp {{
+                background-image: url("data:image/jpg;base64,{encoded_image}");
+                background-size: cover;
+                background-position: center;
+                background-color: black;
+                background-repeat: no-repeat;
+            }}
+
+            [data-testid="stHeader"] {{
+                background-color: #E8CAA8;
+            }}
+
+            [data-testid="stSidebar"] * {{
+                background-color: #E8CAA8;
+                color: black !important;
+                font-size: 20px;
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+    else:
+        # Jika gambar background tidak ditemukan, app TETAP JALAN (nggak bakal crash)
+        st.warning(f"Sistem: File background tidak ditemukan di '{image_file}', melewati latar belakang kustom.")
+
 # Mencari jalur folder tempat app.py berada
 dir_path = os.path.dirname(os.path.realpath(__file__))
-image_path = os.path.join(dir_path, "image/background.jpg")
+# Menggunakan os.path.join agar kompatibel penuh antar sistem (Windows / Linux Streamlit Cloud)
+image_path = os.path.join(dir_path, "image", "background.jpg")
 
-# Panggil fungsinya pakai image_path
+# Panggil fungsi background
 add_bg_from_local(image_path)
 
 
-# Data dan fungsi lainnya
+# 3. Data dan Inisialisasi Session State
 def initialize_session_state():
     if 'stok' not in st.session_state:
         st.session_state['stok'] = {
@@ -64,12 +68,12 @@ def initialize_session_state():
 
 initialize_session_state()
 
-# Navigasi halaman (pastikan struktur sesuai aplikasi Anda)
+# 4. Navigasi Halaman
 dasboard = st.Page("./fitur/dasboard.py", title="Dasboard")
-modal_stok = st.Page("./fitur/modal_stok.py")
-jumlah_penjualan = st.Page("./fitur/jumlah_penjualan.py")
-pendapatan = st.Page("./fitur/pendapatan.py")
-rekapan_penjualan = st.Page("./fitur/rekapan_penjualan.py")
+modal_stok = st.Page("./fitur/modal_stok.py", title="Modal Stok")
+jumlah_penjualan = st.Page("./fitur/jumlah_penjualan.py", title="Jumlah Penjualan")
+pendapatan = st.Page("./fitur/pendapatan.py", title="Pendapatan")
+rekapan_penjualan = st.Page("./fitur/rekapan_penjualan.py", title="Rekapan Penjualan")
 
 pg = st.navigation(
     {
