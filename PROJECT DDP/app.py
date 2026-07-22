@@ -1,5 +1,6 @@
 import streamlit as st
 import base64
+import io
 
 # Fungsi untuk menambahkan gambar latar belakang
 def add_bg_from_local(image_file):
@@ -39,8 +40,12 @@ st.set_page_config(
     page_icon="🛍️"
 )
 
-# Menambahkan gambar latar belakang
-add_bg_from_local("image/background.jpg")  # Pastikan jalur file benar
+# Mencari jalur folder tempat app.py berada
+dir_path = os.path.dirname(os.path.realpath(__file__))
+image_path = os.path.join(dir_path, "image/background.jpg")
+
+# Panggil fungsinya pakai image_path
+add_bg_from_local(image_path)
 
 # Data dan fungsi lainnya
 def initialize_session_state():
