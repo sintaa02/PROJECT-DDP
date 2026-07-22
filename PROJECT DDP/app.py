@@ -1,6 +1,6 @@
-import streamlit as st
 import base64
 import os
+import streamlit as st
 
 # Fungsi untuk menambahkan gambar latar belakang
 def add_bg_from_local(image_file):
@@ -46,6 +46,17 @@ image_path = os.path.join(dir_path, "image/background.jpg")
 
 # Panggil fungsinya pakai image_path
 add_bg_from_local(image_path)
+
+
+# Cari jalur folder tempat file dasboard.py berada
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Arahkan ke file gambar (naik 1 folder ke parent directory)
+image_path = os.path.join(BASE_DIR, "..", "image", "4.png")
+
+# Tampilkan gambar
+st.image(image_path)
+
 
 # Data dan fungsi lainnya
 def initialize_session_state():
